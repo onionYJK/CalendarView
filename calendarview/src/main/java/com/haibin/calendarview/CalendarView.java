@@ -358,6 +358,18 @@ public class CalendarView extends FrameLayout {
     public boolean isYearSelectLayoutVisible() {
         return mYearViewPager.getVisibility() == VISIBLE;
     }
+	/**
+     * 关闭年月份选择视图监听
+     *
+     */
+	public interface OnSelectLayoutCloseListener{
+        void onSelectLayoutClose();
+    }
+    private OnSelectLayoutCloseListener onSelectLayoutCloseListener;
+
+    public void setOnSelectLayoutCloseListener(OnSelectLayoutCloseListener onSelectLayoutCloseListener) {
+        this.onSelectLayoutCloseListener = onSelectLayoutCloseListener;
+    }
 
     /**
      * 关闭年月视图选择布局
@@ -380,6 +392,9 @@ public class CalendarView extends FrameLayout {
     private void closeSelectLayout(final int position) {
         mYearViewPager.setVisibility(GONE);
         mWeekBar.setVisibility(VISIBLE);
+		if(onSelectLayoutCloseListener!=null){
+            onSelectLayoutCloseListener.onSelectLayoutClose();
+        }
         if (position == mMonthPager.getCurrentItem()) {
             if (mDelegate.mCalendarSelectListener != null &&
                     mDelegate.getSelectMode() != CalendarViewDelegate.SELECT_MODE_SINGLE) {
