@@ -371,7 +371,14 @@ public class CalendarView extends FrameLayout {
         closeSelectLayout(position);
         mDelegate.isShowYearSelectedLayout = false;
     }
+    public interface OnSelectLayoutCloseListener{
+        void onSelectLayoutClose();
+    }
+    private OnSelectLayoutCloseListener onSelectLayoutCloseListener;
 
+    public void setOnSelectLayoutCloseListener(OnSelectLayoutCloseListener onSelectLayoutCloseListener) {
+        this.onSelectLayoutCloseListener = onSelectLayoutCloseListener;
+    }
     /**
      * 关闭日历布局，同时会滚动到指定的位置
      *
@@ -380,6 +387,9 @@ public class CalendarView extends FrameLayout {
     private void closeSelectLayout(final int position) {
         mYearViewPager.setVisibility(GONE);
         mWeekBar.setVisibility(VISIBLE);
+		if(onSelectLayoutCloseListener!=null){
+            onSelectLayoutCloseListener.onSelectLayoutClose();
+        }
         if (position == mMonthPager.getCurrentItem()) {
             if (mDelegate.mCalendarSelectListener != null &&
                     mDelegate.getSelectMode() != CalendarViewDelegate.SELECT_MODE_SINGLE) {
